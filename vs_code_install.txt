@@ -1,0 +1,53 @@
+Install Visual Studio Code with apt
+
+Another way to install vscode is via the apt package manager. Follow the steps below to install vscode using apt:
+
+Note: Read our Snap vs. apt article to see how the Snap packaging system compares to the apt package manager.
+
+Step 1: Update the system repository
+
+Run the following command to update the system's repository and ensure you get the latest vscode version:
+
+sudo apt update
+
+Step 2: Install Package Dependencies
+
+For proper operation, vscode requires you to install package dependencies. Run the following command to resolve package dependencies:
+
+sudo apt install software-properties-common apt-transport-https wget -y
+
+Installing package dependencies for vscode on Ubuntu.
+
+The command automatically installs any vscode dependencies.
+
+Step 3: Add GPG Key
+
+Import the GPG key provided by Microsoft to verify the package integrity. Enter:
+
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+
+Adding a GPG key from Microsoft to verify the vscode package integrity.
+
+Step 4: Add Repository
+
+Run the following command to add the Visual Studio Code repository to your system:
+
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
+Adding the vscode repository to ubuntu before installation.
+
+Note: See how to troubleshoot the Add-apt-repository command not found error.
+
+Step 5: Install vscode
+
+After enabling the repository, install vscode by running:
+
+sudo apt install code
+
+Installing vscode using the apt package manager.
+
+Step 6: Verify Installation
+
+Verify vscode installation by running:
+
+code --version
