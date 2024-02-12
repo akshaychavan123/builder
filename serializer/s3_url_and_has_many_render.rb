@@ -35,4 +35,16 @@ class CompanyProfileSerializer < ActiveModel::Serializer
       base_url
     end
   end
-  
+
+  to take specified fields from the assiciative model
+  suppose post belong to user and we want some user data in post serializer 
+
+  attributes :id, :title , :likes , :user_data
+
+  attribute :user_data do |object|
+    {
+      id: object.user.id,
+      email: object.user.email,
+      define required fields like more
+    }
+  end

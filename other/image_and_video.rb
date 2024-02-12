@@ -53,3 +53,40 @@ attribute :images_and_videos do |object, params|
         }
       } : []
   end
+
+
+
+  below is for single profile for post controller
+
+  class PostSerializer
+    include FastJsonapi::ObjectSerializer
+    attributes :id, :name, :title 
+  
+    attribute :profile do |object, params|
+      host = params[:host] || ""
+      if object.profile.attached?
+        media = object.profile
+        {
+          id: media.id,
+          url: host + Rails.application.routes.url_helpers.rails_blob_url(media, only_path: true),
+          filename: media.blob[:filename],
+          content_type: media.blob[:content_type]
+        }
+      end
+    end
+  end
+  
+incontroller
+
+def create 
+  @post = Post.new(post_params)
+  if @post.save
+      render json: PostSerializer.new(@post, serialization_options).serializable_hash, status: :created
+  else
+      render json: { errors: @post.errors }, status: :unprocessable_entity
+  end
+end
+
+def serialization_options
+  { params: { host: request.protocol + request.host_with_port } }
+end
