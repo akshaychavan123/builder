@@ -23,3 +23,30 @@ class RemoveReferenceCategoryFromSummarry < ActiveRecord::Migration[6.0]
 
   remove_reference :summarries, :category, foreign_key: true
                     table_name , :model_name
+
+=================================================================================================================================
+
+module BxBlockCatalogue
+	class Feedback < BxBlockCatalogue::ApplicationRecord
+		self.table_name = :feedbacks
+
+		belongs_to :created_by, class_name: "AccountBlock::Account", foreign_key: "created_by_id"
+		belongs_to :listing
+
+		validates :description, presence: true
+	end
+end
+
+
+def change
+  create_table :feedbacks do |t|
+    t.text :description
+
+    t.references :created_by, foreign_key: { to_table: :accounts }
+    t.references :listing, null: false, foreign_key: true
+
+    t.timestamps
+  end
+end
+
+=======================================================================================================================================

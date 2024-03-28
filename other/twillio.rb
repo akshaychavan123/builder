@@ -426,7 +426,7 @@ end
 ======================================================================================================================================================
 
 STEP 4 
-
+in service/ provider.rb
 module BxBlockSms
     class Provider
       TWILIO = :twilio.freeze
@@ -467,7 +467,61 @@ module BxBlockSms
     end
   end
 
+  ==========================================================================================================================
+in service/providers/twilio.rb    ============= this is for twilio
+  module BxBlockSms
+    module Providers
+      class Twilio
+        class << self
+          def send_sms(full_phone_number, text_content)
+            client = ::Twilio::REST::Client.new(account_id, auth_token)
+            client.messages.create({
+                                     from: from,
+                                     to: full_phone_number,
+                                     body: text_content
+                                   })
+          end
   
+          def account_id
+            Rails.configuration.x.sms.account_id
+          end
+  
+          def auth_token
+            Rails.configuration.x.sms.auth_token
+          end
+  
+          def from
+            Rails.configuration.x.sms.from
+          end
+        end
+      end
+    end
+  end
+  
+for unifonic you can use like ====================================================================================
+  
+# lib/bx_block_sms/providers/unifonic.rb
+module BxBlockSms
+  module Providers
+    class Unifonic
+      BASE_URL = 'https://api.unifonic.com/rest'.freeze
+
+      class << self
+        def send_sms(to, text_content)
+          params = {
+            recipient: to,
+            body: text_content,
+            sender: Rails.configuration.x.sms.sender_id,
+            apiKey: Rails.configuration.x.sms.api_key
+          }
+
+          response = HTTParty.post("#{BASE_URL}/Messages/Send", body: params)
+          response.code == 200 ? true : false
+        end
+      end
+    end
+  end
+end
 
   =====================================================================================================
 
